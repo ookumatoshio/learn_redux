@@ -1,22 +1,19 @@
 import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
-import axios from 'axios';
+import { connect } from 'react-redux';
+import api from '../../api';
 
 class UserList extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      userList: [],
-    }
-  }
   componentWillMount() {
-    axios.get('http://localhost:3000/users').then(res => res.data)
-    .then((res) => {
-      console.log(res);
-      this.setState({ userList: res.users });
-    });
+    const dispatch = this.props.dispatch;
+
+    api.get('users', dispatch,
+      (res) => {
+        dispatch({ type: 'FETCH_USERS', users: res.users });
+      },
+    );
   }
+
   render() {
     return (
       <div>
@@ -25,11 +22,11 @@ class UserList extends React.Component {
         <RaisedButton label="作成" onClick={() => this.props.history.push('/user_new')} />
         <br />
         <ul>
-        {this.state.userList.map(user => <li key={user}>{user}</li>)}
+        {this.props.users.map((user, i) => <li key={i}>{user}</li>)}
         </ul>
       </div>
     );
   }
 }
 
-export default UserList;
+export default connect(store => store)(UserList);

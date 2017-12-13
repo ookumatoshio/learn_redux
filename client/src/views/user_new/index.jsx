@@ -1,6 +1,6 @@
 import React from 'react';
 import { RaisedButton, TextField, CircularProgress, Snackbar } from 'material-ui';
-import axios from 'axios';
+import api from '../../api';
 
 class UserNew extends React.Component {
   constructor(props) {
@@ -12,9 +12,10 @@ class UserNew extends React.Component {
     }
   }
   handleCreate() {
+    const params = { name: this.state.text };
+
     this.setState({ isRequesting: true });
-    axios.post('http://localhost:3000/users', { name: this.state.text }).then(res => res.data)
-    .then((res) => {
+    api.post('users', params).then((res) => {
       this.setState({ isRequesting: false });
       if (res.success) {
         this.props.history.push('/user_list');
