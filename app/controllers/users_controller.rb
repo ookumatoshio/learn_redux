@@ -1,7 +1,10 @@
 class UsersController < ApplicationController
   def index
-    render json: ['hoge', 'fuga'];
-    #render json: ['hoge']
+    sleep 2
+    taro = { id: 1, name: :taro }
+    hana = { id: 2, name: :hana }
+
+    render json: { users: [taro, hana] };
   end
 
   def new

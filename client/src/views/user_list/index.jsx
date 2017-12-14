@@ -3,7 +3,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import api from '../../api';
-import fetchUsers from '../../actions';
+import { fetchUsers, showProgress } from '../../actions';
 
 class UserList extends React.Component {
   componentWillMount() {
@@ -15,12 +15,12 @@ class UserList extends React.Component {
     //   },
     // ).catch(error => console.log('hoge'));
 
+    dispatch(showProgress(true));
     axios.get('http://localhost:3000/users').then(res => res.data)
     .then((res) => {
-      // 基本的なアクションはtypeを同じ名前にして、
-      // connectで受け取るdispatchを変えれば共通化できそう。
+      dispatch(showProgress(false));
       dispatch(fetchUsers(res.users));
-    })
+    });
   }
 
   render() {

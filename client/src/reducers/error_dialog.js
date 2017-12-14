@@ -1,7 +1,8 @@
+import { OPEN_ERROR_DIALOG } from '../actions';
+
 const errorDialog = (state = { open: false }, action) => {
-  console.log('in errorDialog');
   switch (action.type) {
-    case 'IS_OPEN':
+    case OPEN_ERROR_DIALOG:
       return { open: action.open };
     default:
       return state
