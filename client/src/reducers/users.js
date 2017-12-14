@@ -1,9 +1,8 @@
 const users = (state = [], action) => {
+  console.log('in users');
   switch (action.type) {
     case 'FETCH_USERS':
-      return action.users;
-    case 'hoge':
-      console.log(action.error);
+      console.log(action);
       return [];
     default:
       return state

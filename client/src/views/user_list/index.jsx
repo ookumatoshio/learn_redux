@@ -1,17 +1,26 @@
 import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import { connect } from 'react-redux';
+import axios from 'axios';
 import api from '../../api';
+import fetchUsers from '../../actions';
 
 class UserList extends React.Component {
   componentWillMount() {
     const dispatch = this.props.dispatch;
 
-    api.get('users', dispatch,
-      (res) => {
-        dispatch({ type: 'FETCH_USERS', users: res.users });
-      },
-    );
+    // api.get('users', dispatch,
+    //   (res) => {
+    //     dispatch({ type: 'FETCH_USERS', users: res.users });
+    //   },
+    // ).catch(error => console.log('hoge'));
+
+    axios.get('http://localhost:3000/users').then(res => res.data)
+    .then((res) => {
+      // 基本的なアクションはtypeを同じ名前にして、
+      // connectで受け取るdispatchを変えれば共通化できそう。
+      dispatch(fetchUsers(res.users));
+    })
   }
 
   render() {
@@ -22,11 +31,17 @@ class UserList extends React.Component {
         <RaisedButton label="作成" onClick={() => this.props.history.push('/user_new')} />
         <br />
         <ul>
-        {this.props.users.map((user, i) => <li key={i}>{user}</li>)}
+        
         </ul>
       </div>
     );
   }
 }
 
-export default connect(store => store)(UserList);
+//const mapStateToProps = state => { users: state.users };
+
+const mapStateToProps = (state) => {
+  return { users: state.users };
+}
+
+export default connect(mapStateToProps)(UserList);

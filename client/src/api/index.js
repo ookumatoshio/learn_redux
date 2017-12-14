@@ -13,6 +13,8 @@ export default {
     // 画面でcatchの処理をしたい場合はそのcallbackを渡さなければいけなくなる
     // それならcatchは呼び出し元でやった方がいい
     // そうするとリクエスト中のステートをどうやって変更するかが問題(スピナーの表示や２度押しの防止)
+
+    // 結局何をしたいかというと、システムエラー時はダイアログを出したい。
     return axios.get(`http://localhost:3000/${path}`)
       .then(res => _errorCheck(res.data))
       .then(res => callback(res))

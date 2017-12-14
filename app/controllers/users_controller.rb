@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   def index
-    render json: { error: :hoge }
+    render json: ['hoge', 'fuga'];
+    #render json: ['hoge']
   end
 
   def new
