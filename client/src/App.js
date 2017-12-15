@@ -1,37 +1,51 @@
 import React from 'react'
-import { render } from 'react-dom'
+
+import { Route, Switch } from 'react-router'
+import { Redirect } from 'react-router-dom'
+
 import { connect } from 'react-redux'
-import { Route, Switch, Redirect } from 'react-router'
 import { push } from 'react-router-redux'
 
-import UserList from './views/user_list';
-import UserNew from './views/user_new';
+import RaisedButton from 'material-ui/RaisedButton';
 
-const ConnectedSwitch = connect(state => ({
-  location: state.location
-}))(Switch)
+import Home from './views/home';
+import Login from './views/login';
 
-const App = () => (
-  <ConnectedSwitch>
-    <Route
-      exact path="/"
-      render={() => <Redirect to="/user_list" />}
-    />
-    <Route
-      exact
-      path="/user_list"
-      component={UserList}
-    />
-    <Route
-      exact
-      path="/user_new"
-      component={UserNew}
-    />
-  </ConnectedSwitch>
-)
+class PrivateRouteContainer extends React.Component {
+  render() {
+    const {
+      isAuthenticated,
+      component: Component,
+      ...props
+    } = this.props
 
-const mapStateToProps = (state) => {
-  return { location: state.location };
+    return (
+      <Route
+        {...props}
+        render={props =>
+          isAuthenticated
+            ? <Component {...props} />
+            : (
+            <Redirect to={{
+              pathname: '/login',
+              state: { from: props.location }
+            }} />
+          )
+        }
+      />
+    )
+  }
 }
 
-export default connect(mapStateToProps)(App)
+const PrivateRoute = connect(state => ({
+  isAuthenticated: state.authReducer.isAuthenticated
+}))(PrivateRouteContainer)
+
+const App = () => (
+  <Switch>
+    <Route path="/login" component={Login} />
+    <PrivateRoute exact path="/" component={Home} />
+  </Switch>
+)
+
+export default App;
