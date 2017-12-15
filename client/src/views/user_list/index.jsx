@@ -29,7 +29,7 @@ class UserList extends React.Component {
       <div>
         <div>User List</div>
         <br />
-        <RaisedButton label="作成" onClick={() => this.props.dispatch(push('/about'))} />
+        <RaisedButton label="作成" onClick={() => this.props.dispatch(push('/user_new'))} />
         <br />
         <ul>
         </ul>

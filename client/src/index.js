@@ -6,10 +6,9 @@ import { ConnectedRouter, routerReducer, routerMiddleware, push } from 'react-ro
 import { createStore, applyMiddleware } from 'redux'
 import createHistory from 'history/createBrowserHistory'
 
-import { Link } from 'react-router-dom'
-import { Route, Switch } from 'react-router'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import UserList from './views/user_list';
+
+import App from './App';
 
 const history = createHistory()
 
@@ -17,25 +16,6 @@ const store = createStore(
   routerReducer,
   applyMiddleware(routerMiddleware(history)),
 )
-
-const ConnectedSwitch = connect(state => ({
-  location: state.location
-}))(Switch)
-
-const AppContainer = () => (
-  <ConnectedSwitch>
-    <Route
-      exact
-      path="/"
-      component={UserList}
-    />
-    <Route path="/about" component={() => (<h1>About <Link to="/">Home</Link></h1>)} />
-  </ConnectedSwitch>
-)
-
-const App = connect(state => ({
-  location: state.location,
-}))(AppContainer)
 
 render(
   <Provider store={store}>
