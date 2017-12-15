@@ -3,7 +3,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import api from '../../api';
-import fetchUsers from '../../actions';
+import { fetchUsers } from '../../actions';
 
 class UserList extends React.Component {
   componentWillMount() {
