@@ -1,6 +1,7 @@
 import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import { connect } from 'react-redux';
+import { push } from 'react-router-redux'
 import axios from 'axios';
 import api from '../../api';
 import { fetchUsers } from '../../actions';
@@ -28,10 +29,9 @@ class UserList extends React.Component {
       <div>
         <div>User List</div>
         <br />
-        <RaisedButton label="作成" onClick={() => this.props.history.push('/user_new')} />
+        <RaisedButton label="作成" onClick={() => this.props.dispatch(push('/about'))} />
         <br />
         <ul>
-        
         </ul>
       </div>
     );

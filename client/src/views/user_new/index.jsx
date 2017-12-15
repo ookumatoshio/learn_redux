@@ -1,5 +1,7 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { RaisedButton, TextField, CircularProgress, Snackbar } from 'material-ui';
+import { push } from 'react-router-redux'
 import api from '../../api';
 
 class UserNew extends React.Component {
@@ -29,7 +31,7 @@ class UserNew extends React.Component {
       <div>
         <div>User New</div>
         <br />
-        <RaisedButton label="戻る" onClick={() => this.props.history.push('/user_list')} />
+        <RaisedButton label="戻る" onClick={() => this.props.dispatch(push('/user_list'))} />
 
         <br />
         <TextField
@@ -53,4 +55,4 @@ class UserNew extends React.Component {
   }
 }
 
-export default UserNew;
+export default connect()(UserNew);

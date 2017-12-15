@@ -1,24 +1,49 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { BrowserRouter as Router } from 'react-router-dom';
+import React from 'react'
+import { render } from 'react-dom'
+import { connect, Provider } from 'react-redux'
+import { ConnectedRouter, routerReducer, routerMiddleware, push } from 'react-router-redux'
+
+import { createStore, applyMiddleware } from 'redux'
+import createHistory from 'history/createBrowserHistory'
+
+import { Link } from 'react-router-dom'
+import { Route, Switch } from 'react-router'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import { createStore } from 'redux';
-import { Provider } from 'react-redux';
+import UserList from './views/user_list';
 
-import reducers from './reducers';
-import './index.css';
-import App from './App';
-import registerServiceWorker from './registerServiceWorker';
+const history = createHistory()
 
-const store = createStore(reducers);
+const store = createStore(
+  routerReducer,
+  applyMiddleware(routerMiddleware(history)),
+)
 
-ReactDOM.render(
-  <Router>
-    <MuiThemeProvider>
-      <Provider store={store}>
+const ConnectedSwitch = connect(state => ({
+  location: state.location
+}))(Switch)
+
+const AppContainer = () => (
+  <ConnectedSwitch>
+    <Route
+      exact
+      path="/"
+      component={UserList}
+    />
+    <Route path="/about" component={() => (<h1>About <Link to="/">Home</Link></h1>)} />
+  </ConnectedSwitch>
+)
+
+const App = connect(state => ({
+  location: state.location,
+}))(AppContainer)
+
+render(
+  <Provider store={store}>
+    <ConnectedRouter history={history}>
+      <MuiThemeProvider>
         <App />
-      </Provider>
-    </MuiThemeProvider>
-  </Router>
-, document.getElementById('root'));
-registerServiceWorker();
+      </MuiThemeProvider>
+    </ConnectedRouter>
+  </Provider>,
+  document.getElementById('root'),
+)

@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   def index
-    render json: ['hoge', 'fuga'];
+    render json: { users: ['hoge', 'fuga'] };
     #render json: ['hoge']
   end
 

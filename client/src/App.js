@@ -7,6 +7,9 @@ import UserList from './views/user_list';
 import UserNew from './views/user_new';
 
 class App extends Component {
+  componentWillMount() {
+    console.log(this.props);
+  }
   render() {
     const actions = [
       <FlatButton
@@ -24,15 +27,6 @@ class App extends Component {
 
     return (
       <div>
-        <Dialog
-          title="Dialog With Actions"
-          actions={actions}
-          modal={false}
-          open={this.props.errorDialog.open}
-          onRequestClose={() => this.props.dispatch({ type: 'IS_OPEN', open: false })}
-        >
-          The actions in this window were passed in as an array of React objects.
-        </Dialog>
         <Route
           exact path="/"
           render={() => <Redirect to="/user_list" />}
