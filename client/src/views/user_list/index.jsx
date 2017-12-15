@@ -1,13 +1,20 @@
+// React
 import React from 'react';
-
+// Redux
 import { connect } from 'react-redux'
-import { push } from 'react-router-redux'
-
+// Request
+import axios from 'axios';
+// UI
 import RaisedButton from 'material-ui/RaisedButton';
+// ActionCreator
+import { fetchUsers, historyPush } from '../../actions';
 
 class UserContainer extends React.Component {
   componentWillMount() {
-    setTimeout(() => this.props.fetchUsers(), 1000)
+    axios.get('http://localhost:3000/users').then(res => res.data)
+    .then((res) => {
+      this.props.fetchUsers(res.users);
+    });
   }
 
   render() {
@@ -33,8 +40,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    push: path => dispatch(push(path)),
-    fetchUsers: () => dispatch({ type: 'FETCH_USERS', users: [1, 2] }),
+    push: path => dispatch(historyPush(path)),
+    fetchUsers: users => dispatch(fetchUsers(users)),
   };
 };
 

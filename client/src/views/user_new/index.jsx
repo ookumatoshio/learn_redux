@@ -1,11 +1,12 @@
 import React from 'react';
-
+// Redux
 import { connect } from 'react-redux'
-import { push } from 'react-router-redux'
-
+// Request
 import axios from 'axios';
-
+// UI
 import { RaisedButton, TextField } from 'material-ui';
+// ActionCreator
+import { postUser, historyPush } from '../../actions';
 
 class UserNewContainer extends React.Component {
   constructor(props) {
@@ -21,7 +22,7 @@ class UserNewContainer extends React.Component {
       if (!res.success) {
         console.log('enter name');
       } else {
-        this.props.push('/user_list');
+        this.props.historyPush('/user_list');
       }
     });
   }
@@ -34,7 +35,7 @@ class UserNewContainer extends React.Component {
         <RaisedButton
           label="一覧へ"
           style={{ marginBottom: 10 }}
-          onClick={() => this.props.push('/user_list')}
+          onClick={() => this.props.historyPush('/user_list')}
         />
 
         <div>
@@ -47,7 +48,7 @@ class UserNewContainer extends React.Component {
         <RaisedButton
           label="登録"
           style={{ marginBottom: 10 }}
-          onClick={() => this.post()}
+          onClick={() => this.props.postUser({ name: this.state.inputNameText })}
         />
       </div>
     );
@@ -56,9 +57,15 @@ class UserNewContainer extends React.Component {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    push: path => dispatch(push(path)),
-    post: () => dispatch({ type: 'POST_USER', user: { name: 'hoge' } }),
+    historyPush,
+    postUser: user => dispatch(postUser(user)),
   };
 };
+
+// postのロジックをどうするか？
+// dispatchを呼ぶということは、ステートを変えるということ。
+// postは非同期処理の中でステートを変えるので、dispatchの中で非同期処理をするのではなく、
+// 非同期処理の中でdispatchを呼ぶような処理になる。
+// actionの中で非同期を呼ぶ方法もあるが、その場合はthunkなどのライブラリが必要になると思う。
 
 export default connect(null, mapDispatchToProps)(UserNewContainer);

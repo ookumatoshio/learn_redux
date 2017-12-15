@@ -3,6 +3,7 @@ import React from 'react'
 import { render } from 'react-dom'
 // Redux
 import { createStore, applyMiddleware } from 'redux'
+import thunk from 'redux-thunk';
 import { Provider } from 'react-redux'
 import { ConnectedRouter, routerMiddleware } from 'react-router-redux'
 // History
