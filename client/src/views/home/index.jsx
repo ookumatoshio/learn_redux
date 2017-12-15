@@ -10,10 +10,6 @@ const authFail = () => ({
 })
 
 class HomeContainer extends React.Component {
-  componentWillMount() {
-    alert('Private home is at: ' + this.props.location.pathname)
-  }
-
   render() {
     return <RaisedButton label="Logout Here!" onClick={this.props.logout} />
   }

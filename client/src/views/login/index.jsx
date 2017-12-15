@@ -11,15 +11,25 @@ const authSuccess = () => ({
 
 class LoginContainer extends React.Component {
   render() {
-    return <RaisedButton label="Login Here!" onClick={this.props.login} />
+    return (
+      <div>
+        <RaisedButton label="Login Here!" onClick={this.props.login} />
+        <RaisedButton
+          label="User List"
+          style={{ marginLeft: 10 }}
+          onClick={() => this.props.push('/user_list')}
+        />
+      </div>
+    )
   }
 }
 
-const Login = connect(null, dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   login: () => {
     dispatch(authSuccess())
     dispatch(push('/'))
-  }
-}))(LoginContainer)
+  },
+  push: path => dispatch(push(path)),
+});
 
-export default Login;
+export default connect(null, mapDispatchToProps)(LoginContainer);

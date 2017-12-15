@@ -1,58 +1,64 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { RaisedButton, TextField, CircularProgress, Snackbar } from 'material-ui';
-import { push } from 'react-router-redux'
-import api from '../../api';
 
-class UserNew extends React.Component {
+import { connect } from 'react-redux'
+import { push } from 'react-router-redux'
+
+import axios from 'axios';
+
+import { RaisedButton, TextField } from 'material-ui';
+
+class UserNewContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      text: '',
-      isRequesting: false,
-      open: false,
+      inputNameText: '',
     }
   }
-  handleCreate() {
-    const params = { name: this.state.text };
 
-    this.setState({ isRequesting: true });
-    api.post('users', params).then((res) => {
-      this.setState({ isRequesting: false });
-      if (res.success) {
-        this.props.history.push('/user_list');
+  post() {
+    axios.post('http://localhost:3000/users', { name: this.state.inputNameText }).then(res => res.data)
+    .then((res) => {
+      if (!res.success) {
+        console.log('enter name');
       } else {
-        this.setState({ open: true });
+        this.props.push('/user_list');
       }
     });
   }
+
   render() {
     return (
       <div>
-        <div>User New</div>
-        <br />
-        <RaisedButton label="戻る" onClick={() => this.props.dispatch(push('/user_list'))} />
+        <h1>User New</h1>
 
-        <br />
-        <TextField
-          hintText="Hint Text"
-          onChange={e => this.setState({ text: e.target.value })}
+        <RaisedButton
+          label="一覧へ"
+          style={{ marginBottom: 10 }}
+          onClick={() => this.props.push('/user_list')}
         />
 
-        <br />
-        <RaisedButton label="登録" onClick={this.handleCreate.bind(this)} />
-        {this.state.isRequesting && <CircularProgress /> }
+        <div>
+          <TextField
+            hintText="Hint Text"
+            onChange={e => this.setState({ inputNameText: e.target.value })}
+          />
+        </div>
 
-        <br />
-        <Snackbar
-          open={this.state.open}
-          message="登録に失敗しました。"
-          autoHideDuration={2000}
-          onRequestClose={() => this.setState({ open: false })}
+        <RaisedButton
+          label="登録"
+          style={{ marginBottom: 10 }}
+          onClick={() => this.post()}
         />
       </div>
     );
   }
 }
 
-export default connect()(UserNew);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    push: path => dispatch(push(path)),
+    post: () => dispatch({ type: 'POST_USER', user: { name: 'hoge' } }),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(UserNewContainer);
