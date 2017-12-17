@@ -7,12 +7,17 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 import api from '../../api';
 import { setUsers } from '../../actions/user_actions';
+import { openErrorDialog } from '../../actions/error_dialog';
 
 class UserContainer extends React.Component {
   componentWillMount() {
-    api.hoget('users').then((res) => {
-      this.props.dispatch(setUsers(res.users));
-    })
+    const dispatch = this.props.dispatch;
+
+    api.get('users').then((res) => {
+      dispatch(setUsers(res.users));
+    }).catch(error => {
+      dispatch(openErrorDialog(error));
+    });
   }
 
   render() {

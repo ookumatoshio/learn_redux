@@ -1,11 +1,17 @@
-const errorDialog = (state = { open: false }, action) => {
-  console.log('in errorDialog', action);
-  if (action === undefined) {
-    return state;
-  }
+import { OPEN_ERROR_DIALOG } from '../actions/error_dialog';
+
+const initialState = {
+  open: false,
+  title: null,
+}
+
+const errorDialog = (state = initialState, action) => {
   switch (action.type) {
-    case 'IS_OPEN':
-      return { open: action.open };
+    case OPEN_ERROR_DIALOG:
+      return {
+        open: action.payload.open,
+        title: action.payload.message,
+      };
     default:
       return state
   }
