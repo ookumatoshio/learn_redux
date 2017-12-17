@@ -5,6 +5,8 @@ import { render } from 'react-dom'
 import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import { ConnectedRouter, routerMiddleware } from 'react-router-redux'
+// Router
+import { Switch, Redirect, Route } from 'react-router-dom'
 // History
 import createHistory from 'history/createBrowserHistory'
 // UI
@@ -24,7 +26,10 @@ render(
   <Provider store={store}>
     <ConnectedRouter history={history}>
       <MuiThemeProvider>
-        <App />
+        <Switch>
+          <Redirect exact from="/" to="/user_list" />
+          <Route path="/" component={App} />
+        </Switch>
       </MuiThemeProvider>
     </ConnectedRouter>
   </Provider>,

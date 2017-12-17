@@ -5,9 +5,14 @@ import { push } from 'react-router-redux'
 
 import RaisedButton from 'material-ui/RaisedButton';
 
+import api from '../../api';
+import { setUsers } from '../../actions/user_actions';
+
 class UserContainer extends React.Component {
   componentWillMount() {
-    setTimeout(() => this.props.fetchUsers(), 1000)
+    api.hoget('users').then((res) => {
+      this.props.dispatch(setUsers(res.users));
+    })
   }
 
   render() {
@@ -17,7 +22,7 @@ class UserContainer extends React.Component {
         <RaisedButton
           label="作成"
           style={{ marginBottom: 10 }}
-          onClick={() => this.props.push('/user_new')}
+          onClick={() => this.props.dispatch(push('/user_new'))}
         />
         <ul>
         {this.props.users.map(user => <li key={user}>{user}</li>)}
@@ -31,11 +36,4 @@ const mapStateToProps = (state) => {
   return { users: state.users };
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    push: path => dispatch(push(path)),
-    fetchUsers: () => dispatch({ type: 'FETCH_USERS', users: [1, 2] }),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(UserContainer);
+export default connect(mapStateToProps)(UserContainer);

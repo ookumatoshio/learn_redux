@@ -1,35 +1,40 @@
-import React from 'react'
+import React from 'react';
 
 import { connect } from 'react-redux'
-import { push } from 'react-router-redux'
 
-import RaisedButton from 'material-ui/RaisedButton';
+import { RaisedButton } from 'material-ui';
 
-const authSuccess = () => ({
-  type: 'AUTH_SUCCESS'
-})
+import api from '../../api';
 
-class LoginContainer extends React.Component {
+import { historyPush, setSystemErrors } from '../../actions/common_actions';
+
+class UserContainer extends React.Component {
+
+  handleLogin() {
+    api.post('login').then((res) =>{
+      if (!res.errors) {
+        this.props.dispatch(historyPush('/user_list'));
+      } else {
+        this.props.dispatch(setSystemErrors(res.errors));
+      }
+    }).catch(error => console.log(error));
+  }
+
   render() {
     return (
       <div>
-        <RaisedButton label="Login Here!" onClick={this.props.login} />
+        <h1>ログイン画面</h1>
         <RaisedButton
-          label="User List"
-          style={{ marginLeft: 10 }}
-          onClick={() => this.props.push('/user_list')}
+          label="ログイン"
+          onClick={() => this.handleLogin()}
         />
       </div>
-    )
+    );
   }
 }
 
-const mapDispatchToProps = (dispatch) => ({
-  login: () => {
-    dispatch(authSuccess())
-    dispatch(push('/'))
-  },
-  push: path => dispatch(push(path)),
-});
+const mapStateToProps = (state) => {
+  return { users: state.users };
+}
 
-export default connect(null, mapDispatchToProps)(LoginContainer);
+export default connect(mapStateToProps)(UserContainer);

@@ -1,9 +1,8 @@
-import { FETCH_USERS } from '../actions';
+import { SET_USERS } from '../actions/user_actions';
 
 const users = (state = [], action) => {
-  console.log('in users', action.users);
   switch (action.type) {
-    case FETCH_USERS:
+    case SET_USERS:
       return action.users;
     default:
       return state

@@ -21,7 +21,11 @@ export default {
       .catch(error => dispatch({ type: 'ERROR', error })
     );
   },
-  post(path, params) {
+  hoget(path) {
+    return axios.get(`http://localhost:3000/${path}`)
+      .then(res => _errorCheck(res.data));
+  },
+  post(path, params = {}) {
     return axios.post(`http://localhost:3000/${path}`, params).then(res => res.data);
   },
 }
